@@ -23,7 +23,7 @@ content
 ```{r}
 url_template <- "https://leboutique.com/uk/catalog/women/dress?page="
 numbers <- str_c(url_template,c(1:5))
-npages <- 5
+npages <- 5    # нр: цей рядок стає зайвим
 ```
 
 ```{r}
@@ -68,7 +68,7 @@ read.csv("LeBoutiqueDress.csv")
 ```
 
 ```{r}
-npages <- 5 
+npages <- 5   # нр: теж зайва змінна, але це не впливає на програму
 price <- c()
 title <- c()
 brand <- c()
@@ -77,11 +77,12 @@ url_template <- "https://leboutique.com/uk/catalog/women/dress?page="
 ```
 
 ```{r}
-for (page in numbers) {
+for (page in numbers) {    # нр: тут уважно: у вас є готовні url-адреси, змінна page
   
-  url <- str_c(url_template)
+  url <- str_c(url_template)    # нр: тут ви кажете, що урл це шаблон без номера сторінки (він на 76 рядку)
  
-  content <- read_html(url)
+  content <- read_html(url)    # …і дістаєте html чомусь не для заздалегідь зробленого 'page', а для по суті 'url_template'
+  # якщо вставите правильну змінну замість url — все спрацює
   
   title <- content %>%
     html_nodes('div.prod__name.crop') %>%
