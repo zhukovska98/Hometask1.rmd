@@ -79,7 +79,7 @@ url_template <- "https://leboutique.com/uk/catalog/women/dress?page="
 ```{r}
 for (page in numbers) {    # нр: тут уважно: у вас є готовні url-адреси, змінна page
   
-  url <- str_c(url_template)    # нр: тут ви кажете, що урл це шаблон без номера сторінки (він на 76 рядку)
+  url <- str_c(page)    # нр: тут ви кажете, що урл це шаблон без номера сторінки (він на 76 рядку)
  
   content <- read_html(url)    # …і дістаєте html чомусь не для заздалегідь зробленого 'page', а для по суті 'url_template'
   # якщо вставите правильну змінну замість url — все спрацює
