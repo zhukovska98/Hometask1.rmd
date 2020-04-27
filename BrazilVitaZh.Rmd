@@ -7,7 +7,6 @@ output: html_notebook
 library(tidyverse)
 library(lubridate)
 library(rvest)
-
 ```
 
 ```{r}
@@ -15,7 +14,9 @@ air <- read_html("https://www.radarbox.com/statistics/total") %>%
   html_node("table#datatable") %>%
   html_table() %>%
 rename(date = Day)
-# Трохи приведемо до лау назви колонок, для зручності
+
+
+
 colnames(air) <- colnames(air) %>%
   str_replace("  ", "_") %>%
   str_replace(" ", ".") %>%
@@ -39,21 +40,14 @@ air
 
 
 ```{r}
-# df <- read.csv("checkpoints/df-2.csv")
-
-air <- air %>%
-              
+air <- air %>%         
   mutate(date = as.Date(date))  %>%
   select("date","brazil_non.brazil") %>%
   arrange((date))
-  
- 
 air
 ```
 
 ```{r}
-# df <- read.csv("checkpoints/df-3.csv")
-
   air$year = as.numeric(format(air$date,'%Y')) 
   air$month = as.numeric(format(air$date,'%m'))
   air$day = as.numeric(format(air$date,'%d'))
@@ -61,15 +55,14 @@ air[,c("date","year","month", "day")]
 ```
 
 ```{r}
-# df <- read.csv("checkpoints/df-4.csv")
 air <- air %>%
   group_by(day,month) %>%
- filter(n() == 2)
+ filter(n() == 2) %>%
+  ungroup ()
 air
 ```
 
 ```{r}
-# df <- read.csv("checkpoints/df-5.csv")
 wider_df <- air %>% 
 pivot_wider(id_cols = c("day", "month"),
               names_from = "year",
@@ -79,13 +72,10 @@ wider_df
 ```
 
 ```{r}
-# wider_df <- read.csv("checkpoints/df-5-wider.csv")
-
 wider_df <- wider_df %>% 
-mutate(flights = y2019/y2020,
+mutate(flights = y2020/y2019,
        date = str_c("2020",month, day, sep="-"),
        date = ymd(date))
-
 wider_df
 ```
 
@@ -119,23 +109,14 @@ covid19
 ```{r}
 viruses_df <- covid19 %>% 
  filter (country=="Brazil") 
-
-
 viruses_df 
 ```
 
 ```{r}
 df <-viruses_df %>%
-  
  filter (country=="Brazil") %>%
  full_join(wider_df,by=c("date")) 
- 
 df
-```
-
-```{r}
-# wider_df <- read.csv("checkpoints/df-6-wider.csv") %>%
-#   mutate(date = as.Date(date))
 ```
 
 ```{r}
